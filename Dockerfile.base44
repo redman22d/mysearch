@@ -1,0 +1,11 @@
+FROM wordpress:php8.2-apache
+
+# WP-CLI for one-shot setup (install WP, plugins, sample data)
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
+
+# Mu-plugins are copied into the volume on first boot by the WP entrypoint
+# (it mirrors /usr/src/wordpress/* → /var/www/html).
+RUN mkdir -p /usr/src/wordpress/wp-content/mu-plugins
+COPY mu-plugins/base44-helpers.php /usr/src/wordpress/wp-content/mu-plugins/base44-helpers.php

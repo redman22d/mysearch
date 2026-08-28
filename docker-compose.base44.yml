@@ -1,0 +1,70 @@
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: wp
+      MYSQL_DATABASE: wp
+      MYSQL_USER: wp
+      MYSQL_PASSWORD: wp
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u root -pwp --silent 2>/dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile.base44
+    ports:
+      - "3000:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_DB_NAME: wp
+      WORDPRESS_DEBUG: 1
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'https://3000-${BASE44_PUBLIC_HOST_SUFFIX}');
+        define('WP_SITEURL', 'https://3000-${BASE44_PUBLIC_HOST_SUFFIX}');
+        define('WP_DEBUG_LOG', true);
+        define('WP_DEBUG_DISPLAY', false);
+    volumes:
+      - wp_data:/var/www/html
+      - ./tutor-course-search-pro:/var/www/html/wp-content/plugins/tutor-course-search-pro
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  setup:
+    build:
+      context: .
+      dockerfile: Dockerfile.base44
+    user: "33:33"
+    entrypoint: []
+    environment:
+      BASE44_PUBLIC_HOST_SUFFIX: ${BASE44_PUBLIC_HOST_SUFFIX}
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_DB_NAME: wp
+    volumes:
+      - wp_data:/var/www/html
+      - ./tutor-course-search-pro:/var/www/html/wp-content/plugins/tutor-course-search-pro
+      - ./setup.sh:/setup.sh:ro
+      - ./setup-data.php:/setup-data.php:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_healthy
+    command: ["sh", "/setup.sh"]
+
+volumes:
+  wp_data:
