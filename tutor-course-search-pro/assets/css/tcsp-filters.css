@@ -1,0 +1,335 @@
+/* Tutor Course Search Pro — filter bar + suggestions */
+
+.tcsp-filter-bar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: flex-start;
+	margin: 0 0 24px;
+	padding: 16px;
+	background: #f7f8fa;
+	border: 1px solid #e3e6ea;
+	border-radius: 10px;
+}
+
+.tcsp-search-wrap {
+	position: relative;
+	flex: 1 1 260px;
+	min-width: 220px;
+}
+
+.tcsp-search-input {
+	width: 100%;
+	padding: 10px 14px;
+	border: 1px solid #cdd2d8;
+	border-radius: 8px;
+	font-size: 15px;
+	line-height: 1.4;
+	box-sizing: border-box;
+}
+
+.tcsp-search-input:focus {
+	outline: none;
+	border-color: #3e64de;
+	box-shadow: 0 0 0 3px rgba( 62, 100, 222, 0.15 );
+}
+
+.tcsp-filter-controls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	align-items: center;
+}
+
+.tcsp-select {
+	padding: 9px 12px;
+	border: 1px solid #cdd2d8;
+	border-radius: 8px;
+	background: #fff;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.tcsp-apply-btn {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 8px;
+	background: #3e64de;
+	color: #fff;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+
+.tcsp-apply-btn:hover {
+	background: #2f4fc0;
+}
+
+.tcsp-reset-btn {
+	padding: 10px 16px;
+	border: 1px solid #cdd2d8;
+	border-radius: 8px;
+	background: #fff;
+	color: #4b5563;
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tcsp-reset-btn:hover {
+	background: #f2f3f5;
+	color: #1c2230;
+}
+
+/* Multiselect (category / tag) dropdown */
+.tcsp-multiselect {
+	position: relative;
+}
+
+.tcsp-multiselect-toggle {
+	padding: 9px 12px;
+	border: 1px solid #cdd2d8;
+	border-radius: 8px;
+	background: #fff;
+	font-size: 14px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.tcsp-multiselect-count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 5px;
+	border-radius: 999px;
+	background: #3e64de;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+}
+
+.tcsp-multiselect-panel {
+	position: absolute;
+	top: calc( 100% + 6px );
+	left: 0;
+	z-index: 998;
+	min-width: 200px;
+	max-height: 260px;
+	overflow-y: auto;
+	background: #fff;
+	border: 1px solid #e3e6ea;
+	border-radius: 8px;
+	box-shadow: 0 12px 32px rgba( 20, 24, 40, 0.14 );
+	padding: 8px;
+}
+
+.tcsp-multiselect-option {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 8px;
+	font-size: 14px;
+	cursor: pointer;
+	border-radius: 6px;
+	white-space: nowrap;
+}
+
+.tcsp-multiselect-option--child {
+	padding-left: calc( 8px + ( var(--tcsp-depth, 1) * 14px ) );
+}
+
+.tcsp-term-count {
+	margin-left: auto;
+	min-width: 20px;
+	padding: 1px 6px;
+	border-radius: 999px;
+	background: #eef1f6;
+	color: #687386;
+	font-size: 11px;
+	line-height: 1.4;
+	text-align: center;
+}
+
+.tcsp-multiselect-option:hover {
+	background: #f2f5ff;
+}
+
+.tcsp-multiselect-hint {
+	margin: 0 0 8px;
+	padding: 0 4px;
+	font-size: 12px;
+	color: #6b7280;
+	white-space: normal;
+}
+
+/* Suggestion dropdown */
+.tcsp-suggest-box {
+	position: absolute;
+	top: calc( 100% + 6px );
+	left: 0;
+	right: 0;
+	z-index: 999;
+	background: #fff;
+	border: 1px solid #e3e6ea;
+	border-radius: 10px;
+	box-shadow: 0 12px 32px rgba( 20, 24, 40, 0.14 );
+	overflow: hidden;
+	max-height: 420px;
+	overflow-y: auto;
+}
+
+.tcsp-suggest-item {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	padding: 10px 14px;
+	text-decoration: none;
+	color: #1c2230;
+	border-bottom: 1px solid #f0f2f5;
+}
+
+.tcsp-suggest-item:last-of-type {
+	border-bottom: none;
+}
+
+.tcsp-suggest-item:hover,
+.tcsp-suggest-item.is-active {
+	background: #f2f5ff;
+}
+
+.tcsp-suggest-item.is-promoted {
+	background: linear-gradient( 90deg, rgba( 255, 214, 92, 0.16 ), transparent 60% );
+}
+
+.tcsp-suggest-thumb {
+	width: 46px;
+	height: 46px;
+	border-radius: 6px;
+	object-fit: cover;
+	flex: 0 0 auto;
+	background: #e7eaef;
+}
+
+.tcsp-suggest-thumb--empty {
+	display: inline-block;
+}
+
+.tcsp-suggest-meta {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.tcsp-suggest-title {
+	font-weight: 600;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.tcsp-suggest-sub {
+	font-size: 12px;
+	color: #6b7280;
+	margin-top: 2px;
+}
+
+.tcsp-badge {
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.4px;
+	padding: 2px 6px;
+	border-radius: 4px;
+}
+
+.tcsp-badge--promoted {
+	background: #ffd65c;
+	color: #5a4200;
+}
+
+.tcsp-sponsored-sticker {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 3;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 5px 8px;
+	border-radius: 999px;
+	background: #111827;
+	color: #fff;
+	font-size: 10px;
+	font-weight: 800;
+	letter-spacing: .04em;
+	line-height: 1;
+	text-transform: uppercase;
+	box-shadow: 0 2px 8px rgba( 17, 24, 39, .18 );
+}
+
+/* Tutor's standard cards use one of these wrappers around the thumbnail. */
+.tutor-card,
+.tutor-course-card,
+.tutor-course-thumbnail,
+.tutor-course-thumbnail-wrap {
+	position: relative;
+}
+
+.tcsp-sponsored-icon {
+	width: 12px;
+	height: 12px;
+	font-size: 11px;
+	line-height: 12px;
+}
+
+.tcsp-sponsored-sticker--platinum {
+	background: #7c3aed;
+}
+
+.tcsp-sponsored-sticker--gold {
+	background: #b7791f;
+}
+
+.tcsp-sponsored-sticker--featured {
+	background: #2563eb;
+}
+
+.tcsp-suggest-loading,
+.tcsp-suggest-empty {
+	padding: 14px;
+	font-size: 13px;
+	color: #6b7280;
+}
+
+.tcsp-suggest-all {
+	display: block;
+	padding: 11px 14px;
+	text-align: center;
+	font-size: 13px;
+	font-weight: 600;
+	color: #3e64de;
+	text-decoration: none;
+	background: #fafbfe;
+	border-top: 1px solid #f0f2f5;
+}
+
+.tcsp-suggest-all:hover {
+	background: #f2f5ff;
+}
+
+@media ( max-width: 600px ) {
+	.tcsp-filter-controls {
+		width: 100%;
+	}
+	.tcsp-select,
+	.tcsp-apply-btn {
+		flex: 1 1 auto;
+	}
+}
